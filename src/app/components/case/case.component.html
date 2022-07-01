@@ -1,0 +1,149 @@
+<header>
+  <h3 class="case-title">
+    <span class="index">{{ index + 1 }}</span
+    >{{ case.Title }}
+  </h3>
+  <div class="case-number-container">
+    <span class="case-number"> {{ case.Case_Number }}</span>
+    <a class="superior-court-url" [href]="case.url" target="_blank">
+      Superior Court</a
+    >
+    <a class="eAccess-url" [href]="eAccessUrl" target="_blank">eAccess</a>
+    <span class="spacer"></span>
+    <span class="filing-date"
+      ><span class="label">Filing Date</span
+      >{{ convertToJSDate(case.File_Date) | date: 'shortDate' }}</span
+    >
+  </div>
+  <span class="aslan-status" [ngStyle]="{ backgroundColor: caseTypeColor }">{{
+    case.Aslan_Case_Type
+  }}</span>
+</header>
+
+<div class="table border">
+  <div class="property-group" *ngFor="let prop of props">
+    <label>{{ prop }}</label>
+    <span class="value">{{ case[prop] }}</span>
+  </div>
+</div>
+
+<!-- 
+  PARTIES
+ -->
+
+<h4 class="table-heading">
+  <span
+    class="material-symbols-outlined expand-more-icon"
+    (click)="toggleParties()"
+  >
+    {{ isPartiesOpen ? 'expand_more' : 'chevron_right' }} </span
+  >Parties
+</h4>
+<div class="table" *ngIf="isPartiesOpen">
+  <div class="document header-row">
+    <span class="name">Name</span>
+    <span class="attorney">Attorney</span>
+    <span class="role">Role</span>
+  </div>
+  <div class="document tall-row" *ngFor="let party of parties">
+    <span class="name">{{ party.name }}</span>
+    <span class="attorney">{{ party.attorney }}</span>
+    <span class="role">{{ party.role }}</span>
+  </div>
+</div>
+
+<!-- 
+  DOCUMENTS
+ -->
+
+<h4 class="table-heading">
+  <span
+    class="material-symbols-outlined expand-more-icon"
+    (click)="toggleDocs()"
+  >
+    {{ isDocumentsOpen ? 'expand_more' : 'chevron_right' }} </span
+  >Documents
+</h4>
+<div class="table" *ngIf="isDocumentsOpen">
+  <div class="document header-row">
+    <span class="filing-date">File</span>
+    <span class="docket-date">Dock</span>
+    <span class="desc-container">Description</span>
+    <span class="filing-party">Party</span>
+  </div>
+  <div class="document border" *ngFor="let doc of documents">
+    <span class="filing-date">{{
+      convertToJSDate(doc.filingDate) | date: 'M/d/yy'
+    }}</span>
+    <span class="docket-date">{{
+      convertToJSDate(doc.docketDate) | date: 'M/d/yy'
+    }}</span>
+    <div class="desc-container">
+      <a [href]="doc.eAccessPreview" target="_blank" class="description">{{
+        doc.description
+      }}</a>
+      <div class="notes" *ngIf="doc.notes">{{ doc.notes }}</div>
+    </div>
+    <span class="filing-party">{{ doc.filingParty }}</span>
+  </div>
+</div>
+
+<!-- 
+  CALENDAR ITEMS
+ -->
+
+<h4 class="table-heading">
+  <span
+    class="material-symbols-outlined expand-more-icon"
+    (click)="toggleCalendarItems()"
+  >
+    {{ isCalendarItemsOpen ? 'expand_more' : 'chevron_right' }} </span
+  >Calendar Items
+</h4>
+<div class="table border" *ngIf="isCalendarItemsOpen">
+  <div class="document header-row">
+    <span class="calendar-item-date">Date</span>
+    <span class="calendar-item-time">Time</span>
+    <span class="calendar-item-event">Event</span>
+  </div>
+  <div class="document" *ngFor="let item of calendarItems">
+    <span class="calendar-item-date">{{
+      convertToJSDate(item.date) | date: 'M/d/yy'
+    }}</span>
+    <span class="calendar-item-time">{{ item.time }}</span>
+    <span class="calendar-item-event">{{ item.event }}</span>
+  </div>
+</div>
+
+<!-- 
+  JUDGEMENTS
+ -->
+
+<h4 class="table-heading">
+  <span
+    class="material-symbols-outlined expand-more-icon"
+    (click)="toggleJudgements()"
+  >
+    {{ isJudgementsOpen ? 'expand_more' : 'chevron_right' }} </span
+  >Judgements
+</h4>
+<div class="table border" *ngIf="isJudgementsOpen">
+  <div class="document header-row">
+    <span class="judgement-date">Date</span>
+    <span class="judgement-for">For/A</span>
+    <span class="judgement-amount">Amount</span>
+    <span class="judgement-frequency">Freq</span>
+    <span class="judgement-type">Type</span>
+    <span class="judgement-status">Status</span>
+  </div>
+  <div class="document" *ngFor="let judgement of judgements">
+    <span class="judgement-date">{{
+      convertToJSDate(judgement.date) | date: 'M/d/yy'
+    }}</span>
+    <span class="judgement-for">{{ judgement.forOrAgainst }}</span>
+    <span class="judgement-amount">{{ judgement.amount }}</span>
+    <span class="judgement-frequency">{{ judgement.frequency }}</span>
+    <span class="judgement-type">{{ judgement.type }}</span>
+    <span class="judgement-status">{{ judgement.status }}</span>
+  </div>
+</div>
